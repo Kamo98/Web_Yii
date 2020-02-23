@@ -2,7 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\Discipline;
+use app\models\FilterTeachers;
+use app\models\TeacherProfile;
 use Yii;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -61,8 +65,40 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $filterTeachersModel = new FilterTeachers();
+        $isFilter = false;
+
+        if ($filterTeachersModel->load(Yii::$app->request->post())) {
+            Yii::debug(array2str($filterTeachersModel), "TEST");
+            $isFilter = true;
+        }
+
+        $query = TeacherProfile::find();
+
+        if ($isFilter) {
+            $prices = explode('-', $filterTeachersModel['price']);
+
+            $teacherProfiles = $query
+                ->where(
+                    ['and', 'id_discipline=:id_discipline', ['between', 'price', $prices[0], $prices[1]]],
+                    ['id_discipline' => $filterTeachersModel['discipline']])
+                ->all();
+        } else {
+            $teacherProfiles = $query
+                ->all();
+        }
+
+        $disciplines = Discipline::find()->all();
+
+
+
+        return $this->render('index', [
+            'teacherProfiles' => $teacherProfiles,
+            'disciplines' => $disciplines,
+            'filterTeachersModel' => $filterTeachersModel
+        ]);
     }
+
 
     /**
      * Login action.

@@ -80,6 +80,8 @@
       <path value="$PROJECT_DIR$/basic/vendor/sebastian/diff" />
       <path value="$PROJECT_DIR$/basic/vendor/sebastian/version" />
       <path value="$PROJECT_DIR$/basic/vendor/behat/gherkin" />
+      <path value="$PROJECT_DIR$/basic/vendor/yiisoft/yii2-bootstrap4" />
+      <path value="$PROJECT_DIR$/basic/vendor/npm-asset/bootstrap" />
     </include_path>
   </component>
 </project>

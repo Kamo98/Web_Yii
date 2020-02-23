@@ -1,0 +1,58 @@
+.img-left {
+    margin: 0 20px 10px 0;
+    float: left;
+    padding:.25rem;
+    background-color:#fff;
+    border:1px solid #dee2e6;
+    border-radius:.25rem;
+    max-width:100%;
+    height:auto
+}
+
+
+.col-md, .col-md-4  {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+#catalog_teachers {
+    margin-top: 5rem;
+}
+
+#btnSearchTeach {
+    margin-top:2rem;
+}
+
+
+
+.textPrice {
+    font-weight: bold;
+    font-family: monospace;
+    font-size: large;
+    float:right;
+    float:right;
+
+}
+
+.nameDiscipline{
+    float: right;
+}
+
+.signInLink{
+    float: right;
+}
+
+.contacts {
+    float: right;
+    margin-right: 2rem;;
+}
+
+#infoTeacher{
+    margin-top: 7rem;
+}
+
+#addTeach {
+    margin-top: 2rem;
+}
+
+
