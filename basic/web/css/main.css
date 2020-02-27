@@ -19,11 +19,9 @@
     margin-top: 5rem;
 }
 
-#btnSearchTeach {
+.btnSearchTeach {
     margin-top:2rem;
 }
-
-
 
 .textPrice {
     font-weight: bold;
@@ -54,5 +52,4 @@
 #addTeach {
     margin-top: 2rem;
 }
-
 

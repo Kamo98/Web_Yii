@@ -20,7 +20,7 @@ class TeacherProfile extends ActiveRecord
     }
 
     public function getDiscipline(){
-        return $this->hasOne(Discipline::className(), ['id_discipline' => 'id_discipline']);
+        return $this->hasOne(Discipline::class, ['id_discipline' => 'id_discipline']);
     }
 
     public function getTeacher(){

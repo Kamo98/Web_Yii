@@ -11,7 +11,7 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\LinkPager;
 use yii\helpers\ArrayHelper;
- ?>
+?>
 <div class="container" id="catalog_teachers">
 
     <?php
@@ -24,16 +24,17 @@ use yii\helpers\ArrayHelper;
         </div>
         <div class="col-md">
             <?= $filterTeachersForm->field($filterTeachersModel, 'price')->dropDownList([
-                    '300-3000' => 'Не важно',
-                    '300-600' => 'От 300 до 600 руб',
-                    '600-1000' => 'От 600 до 1000 руб',
-                    '1000-1500' => 'От 1000 до 1500 руб',
-                    '1500-3000' => 'От 1500 до 3000 руб',
+                '300-3000' => 'Не важно',
+                '300-600' => 'От 300 до 600 руб',
+                '600-1000' => 'От 600 до 1000 руб',
+                '1000-1500' => 'От 1000 до 1500 руб',
+                '1500-3000' => 'От 15000 до 3000 руб',
             ], ['prompt' => '', ]) ?>
         </div>
         <div class="col-md">
             <?= Html::submitButton('Найти', ['class' => 'btn btn-primary btnSearchTeach']) ?>
-            <a href="/" class="btn btn-primary btnSearchTeach">Очистить фильтр</a>
+            <a href="/admin/main" class="btn btn-primary btnSearchTeach">Очистить фильтр</a>
+            <a href="/admin/edit" class="btn btn-outline-success" id="addTeach">Добавить преподавателя</a>
         </div>
     </div>
 
@@ -41,11 +42,17 @@ use yii\helpers\ArrayHelper;
 
 
     <div class="row">
-        <?php
-//        print_array($teacherProfiles[0]->discipline);
-        ////        print_array($teacherProfiles[0]->teacher);
-        //print_array($teacherProfiles);
-        ?>
+        <?php if(Yii::$app->session->hasFlash('PostDeletedError')): ?>
+            <div class="alert alert-error">
+                Произошла ошибка при удалении карточки преподавателя, попробуйте ещё раз
+            </div>
+        <?php endif; ?>
+
+        <?php if(Yii::$app->session->hasFlash('PostDeleted')): ?>
+            <div class="alert alert-success">
+                Анкета преподавателя успешно удалена
+            </div>
+        <?php endif; ?>
     </div>
 
     <?php
@@ -69,11 +76,26 @@ use yii\helpers\ArrayHelper;
                     <p class="card-text"><?= $profile->teacher['experience']?></p>
                     <?= Html::a('Подробнее...', ['/site/teacher', 'id' => $profile['id_profile']], ['class' => 'btn btn-primary']); ?>
                     <p class="textPrice text-right"> <?= $profile['price'] ?> руб/ч</p>
+
+                    <div class = "adminPanel">
+                        <div class="row">
+                            <div class="col-md">
+                                <?= Html::a('Удалить', ['/admin/delete', 'id' => $profile['id_profile']],
+                                ['class' => 'btn btn-outline-warning', 'id' => 'delTeach_1']); ?>
+<!--                                <a href="" class="btn btn-outline-warning" id="delTeach_1">Удалить</a>-->
+                            </div>
+                            <div class="col-md">
+                                <?= Html::a('Изменить', ['/admin/edit', 'id' => $profile['id_teacher']],
+                                    ['class' => 'btn btn-outline-primary', 'id' => 'changeTeach_1']); ?>
+<!--                                <a href="" class="btn btn-outline-primary" id="changeTeach_1" >Изменить</a>-->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-    <?php
+        <?php
         if ($i % 2 == 1)
             echo "</div>";
         $i++;

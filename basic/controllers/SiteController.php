@@ -9,6 +9,7 @@ use Yii;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\HttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
@@ -96,6 +97,20 @@ class SiteController extends Controller
             'teacherProfiles' => $teacherProfiles,
             'disciplines' => $disciplines,
             'filterTeachersModel' => $filterTeachersModel
+        ]);
+    }
+
+    public function actionTeacher($id = NULL) {
+        if ($id === NULL)
+            throw new HttpException(404, "Not found!");
+
+        $teacherProfile = TeacherProfile::findOne($id);
+
+        if ($teacherProfile === NULL)
+            throw new HttpException(404, 'Document Does Not Exist');
+
+        return $this->render('teacher', [
+            'teacherProfile' => $teacherProfile
         ]);
     }
 

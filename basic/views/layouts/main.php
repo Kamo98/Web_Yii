@@ -39,26 +39,26 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
+            ['label' => 'Главная', 'url' => ['/']],
+            ['label' => 'О нас', 'url' => ['/']],
+            ['label' => 'Контакты', 'url' => ['/site/contact']],
+//            Yii::$app->user->isGuest ? (
+//                ['label' => 'Login', 'url' => ['/site/login']]
+//            ) : (
+//                '<li>'
+//                . Html::beginForm(['/site/logout'], 'post')
+//                . Html::submitButton(
+//                    'Logout (' . Yii::$app->user->identity->username . ')',
+//                    ['class' => 'btn btn-link logout']
+//                )
+//                . Html::endForm()
+//                . '</li>'
+//            )
         ],
     ]);
     NavBar::end();
     ?>
-    
+
 
     <div class="container">
         <?= Breadcrumbs::widget([
@@ -69,12 +69,16 @@ AppAsset::register($this);
     </div>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+<footer class="page-footer font-small bg-dark  align-bottom">
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3 text-white">© 2020 Copyright
+        <a href="http://besmart.local/">  besmart.local</a>
+        <p class="contacts text-white">Телефон: 8-800-890-23-34</p>
+        <a href="/admin/main">Панель администратора</a>
     </div>
+    <!-- Copyright -->
+
 </footer>
 
 <?php $this->endBody() ?>
