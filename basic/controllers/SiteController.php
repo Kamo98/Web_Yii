@@ -59,6 +59,8 @@ class SiteController extends Controller
         ];
     }
 
+
+
     /**
      * Displays homepage.
      *
@@ -69,29 +71,32 @@ class SiteController extends Controller
         $filterTeachersModel = new FilterTeachers();
         $isFilter = false;
 
-        if ($filterTeachersModel->load(Yii::$app->request->post())) {
-            Yii::debug(array2str($filterTeachersModel), "TEST");
-            $isFilter = true;
+        if (Yii::$app->request->isAjax) {
+            Yii::debug("isAjax", "TEST");
+            if ($filterTeachersModel->load(Yii::$app->request->post()) && $filterTeachersModel->validate()) {
+                Yii::debug(array2str($filterTeachersModel), "TEST");
+                $isFilter = true;
+            }
         }
-
         $query = TeacherProfile::find();
-
         if ($isFilter) {
             $prices = explode('-', $filterTeachersModel['price']);
-
             $teacherProfiles = $query
                 ->where(
                     ['and', 'id_discipline=:id_discipline', ['between', 'price', $prices[0], $prices[1]]],
-                    ['id_discipline' => $filterTeachersModel['discipline']])
-                ->all();
+                    ['id_discipline' => $filterTeachersModel['discipline']])->all();
         } else {
-            $teacherProfiles = $query
-                ->all();
+            $teacherProfiles = $query->all();
         }
 
         $disciplines = Discipline::find()->all();
+        if (Yii::$app->request->isAjax) {
+            Yii::debug(array2str($teacherProfiles), "TEST");
 
-
+            return $this->renderAjax('resultFilter', [
+                'teacherProfiles' => $teacherProfiles
+            ]);
+        }
 
         return $this->render('index', [
             'teacherProfiles' => $teacherProfiles,

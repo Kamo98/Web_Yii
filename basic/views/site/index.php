@@ -15,7 +15,7 @@ use yii\helpers\ArrayHelper;
 <div class="container" id="catalog_teachers">
 
     <?php
-    $filterTeachersForm = ActiveForm::begin();
+    $filterTeachersForm = ActiveForm::begin(['id' => 'formFilter']);
     $items = ArrayHelper::map($disciplines,'id_discipline','Name');
     ?>
     <div class="row">
@@ -32,7 +32,7 @@ use yii\helpers\ArrayHelper;
             ], ['prompt' => '', ]) ?>
         </div>
         <div class="col-md">
-            <?= Html::submitButton('Найти', ['class' => 'btn btn-primary btnSearchTeach']) ?>
+            <?= Html::submitButton('Найти', ['class' => 'btn btn-primary btnSearchTeach', 'id' => 'filterSubmit']) ?>
             <a href="/" class="btn btn-primary btnSearchTeach">Очистить фильтр</a>
         </div>
     </div>
@@ -48,36 +48,39 @@ use yii\helpers\ArrayHelper;
         ?>
     </div>
 
-    <?php
-    $i = 0;
-    foreach ($teacherProfiles as $profile) :
-        if ($i % 2 == 0)
-            echo "<div class=\"row\">";
-        ?>
+    <div id = "resFilter">
 
-        <div class="col-md">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <?= $profile->teacher['FIO'] ?>
-                        <small class="text-muted nameDiscipline"><?= $profile->discipline['Name'] ?></small>
-                    </h4>
-                    <a data-fancybox="gallery" href= <?="/img/". $profile->teacher['Avatar']?> >
-                        <img class = "img-left" src= <?="/img/". $profile->teacher['Avatar_mini']?>>
-                    </a>
-                    <p class="card-text"> <?= $profile->teacher['education']?> </p>
-                    <p class="card-text"><?= $profile->teacher['experience']?></p>
-                    <?= Html::a('Подробнее...', ['/site/teacher', 'id' => $profile['id_profile']], ['class' => 'btn btn-primary']); ?>
-                    <p class="textPrice text-right"> <?= $profile['price'] ?> руб/ч</p>
-                </div>
-            </div>
-        </div>
-
-    <?php
-        if ($i % 2 == 1)
-            echo "</div>";
-        $i++;
-    endforeach; ?>
+    </div>
 
 
 </div>
+
+
+<?php
+$ajaxJS = <<<JS
+     //Перехват обработки нажатия кнопки "Найти"
+    $('#formFilter').on('beforeSubmit', function() {
+        const data = $('#formFilter').serialize();
+        alert(data);
+        $.ajax({
+            url: '/',
+            type: 'POST',
+            data: data,
+            dataType: "html",
+            success: function(res) {
+                const response = $('#resFilter');
+                response.html(res);
+                //alert('Success ajax');
+            },
+            error: function(jqXHR, errMsg){
+                alert('Произошла ошибка попробуйте ещё раз');
+            }
+        });
+        return false;
+    });
+JS;
+
+//Зарегистрируем js-скрипт
+$this->registerJs($ajaxJS);
+
+?>

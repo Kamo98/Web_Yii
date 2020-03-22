@@ -54,27 +54,65 @@ class AdminController extends Controller
     }
 
 
-    public function actionDelete($id = NULL) {
-        if ($id === NULL)
-        {
-            Yii::$app->session->setFlash('PostDeletedError');
-            Yii::$app->getResponse()->redirect(array('/admin/main'));
+//    public function actionDelete($id = NULL) {
+//        if ($id === NULL)
+//        {
+//            Yii::$app->session->setFlash('PostDeletedError');
+//            Yii::$app->getResponse()->redirect(array('/admin/main'));
+//        }
+//
+//        try {
+//            TeacherProfile::findOne($id)->delete();
+//        } catch (StaleObjectException $e) {
+//            Yii::$app->session->setFlash('PostDeletedError');
+//            Yii::$app->getResponse()->redirect(array('/admin/main'));
+//        } catch (\Throwable $e) {
+//            Yii::$app->session->setFlash('PostDeletedError');
+//            Yii::$app->getResponse()->redirect(array('/admin/main'));
+//        }
+//
+//
+//
+//
+//        Yii::$app->session->setFlash('PostDeleted');
+//        Yii::$app->getResponse()->redirect(array('/admin/main'));
+//    }
+
+
+    public function actionDelete() {
+
+        if (Yii::$app->request->isAjax) {
+            Yii::debug("isAjax", "actionDelete");
+            $data = Yii::$app->request->post();
+            Yii::debug(array2str($data), "actionDelete");
+
+            $id = $data['id'];          //Получить id удаляемой анкеты
+            try {
+                TeacherProfile::findOne($id)->delete();
+
+
+                $teacherProfiles = TeacherProfile::find()->all();
+
+                return $this->renderAjax('teachers_list', [
+                    'teacherProfiles' => $teacherProfiles
+                ]);
+
+            } catch (StaleObjectException $e) {
+                Yii::$app->session->setFlash('PostDeletedError');
+                Yii::$app->getResponse()->redirect(array('/admin/main'));
+            } catch (\Throwable $e) {
+                Yii::$app->session->setFlash('PostDeletedError');
+                Yii::$app->getResponse()->redirect(array('/admin/main'));
+            }
         }
 
-        try {
-            TeacherProfile::findOne($id)->delete();
-        } catch (StaleObjectException $e) {
-            Yii::$app->session->setFlash('PostDeletedError');
-            Yii::$app->getResponse()->redirect(array('/admin/main'));
-        } catch (\Throwable $e) {
-            Yii::$app->session->setFlash('PostDeletedError');
-            Yii::$app->getResponse()->redirect(array('/admin/main'));
-        }
 
-
-        Yii::$app->session->setFlash('PostDeleted');
-        Yii::$app->getResponse()->redirect(array('/admin/main'));
+//        Yii::$app->session->setFlash('PostDeleted');
+//        Yii::$app->getResponse()->redirect(array('/admin/main'));
     }
+
+
+
 
 
     public function actionEdit($id = NULL) {
